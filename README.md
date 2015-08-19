@@ -43,7 +43,8 @@ var imgVariants = [
     "INTERLACE": "Line"
   }
 ];
-// The name of the destination S3 bucket is derived by adding this postfix to the name of the source S3 bucket:
+// The name of the destination S3 bucket is derived by
+// adding this postfix to the name of the source S3 bucket:
 var DST_BUCKET_POSTFIX = "-resized";
 ```
 
@@ -53,10 +54,9 @@ The source and destination AWS S3 buckets must exist.
 ## Interface with AWS
 
 The following assumes/requires the existence within your AWS account of:
+
 1.	an "adminuser" user with administrative permission
 2.	a "awsLambdaExecute" role with execute permission
-
-In case any code changes are made, (re)zip the resize_images.js file and node_modules folder into "resize_images.zip".
 
 
 ### Test whether lambda can be reached with the adminuser
@@ -101,6 +101,9 @@ https://us-west-2.console.aws.amazon.com/cloudwatch/home?region=us-west-2#logs:
 
 
 ### Upload an updated zip file
+
+In case any code changes are made, (re)zip the resize_images.js file and node_modules folder into "resize_images.zip" and re-upload.
+
 (run in the folder where the zip file is located):
 
 ```
