@@ -20,14 +20,14 @@
             "s3SchemaVersion":"1.0",
             "configurationId":"testConfigRule",
             "bucket":{
-               "name":"suibertje-images",
+               "name":"<<your S3 bucket name>>",
                "ownerIdentity":{
                   "principalId":"A3NL1KOZZKExample"
                },
                "arn":"arn:aws:s3:::sourcebucket"
             },
             "object":{
-               "key":"_9EM1945.jpg",
+               "key":"<<your jpg or png file name>>",
                "size":384344,
                "eTag":"a05db633659757606b93c511cfe81a28"
             }
