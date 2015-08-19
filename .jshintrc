@@ -1,0 +1,11 @@
+{
+  "globals": {
+    "define": true,
+    "require": true,
+    "window": true,
+    "document": true,
+    "location": true,
+    "console": true
+  },
+  "node": true
+}
