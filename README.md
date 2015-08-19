@@ -60,7 +60,7 @@ The following assumes/requires the existence within your AWS account of:
 
 
 ### Test whether lambda can be reached with the adminuser
-`aws lambda list-functions --profile adminuse`
+`aws lambda list-functions --profile adminuser`
 
 
 ### Create a zip file
@@ -83,6 +83,7 @@ aws lambda create-function \
 ```
 
 ### Execute a test file input.json
+Modify the input.json file: enter your S3 bucket name and your uploaded image name in the indicated locations. (The bucket must exist and you must have uploaded a jpg or png image for this test to succeed).
 
 ```
 aws lambda invoke \
