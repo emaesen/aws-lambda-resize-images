@@ -24,7 +24,7 @@
                "ownerIdentity":{
                   "principalId":"A3NL1KOZZKExample"
                },
-               "arn":"arn:aws:s3:::sourcebucket"
+               "arn":"arn:aws:s3:::<<your S3 bucket name>>"
             },
             "object":{
                "key":"<<your jpg or png file name>>",
