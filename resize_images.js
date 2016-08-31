@@ -9,34 +9,22 @@ var util = require('util');
 // configuration as code - add, modify, remove array elements as desired
 var imgVariants = [
   {
-    "SIZE": "Large",
-    "POSTFIX": "-l",
-    "MAX_WIDTH": 1200,
-    "MAX_HEIGHT": 1000,
+    "SIZE": "Medium",
+    "POSTFIX": "-300",
+    "MAX_WIDTH": 300,
+    "MAX_HEIGHT": 300,
     "SIZING_QUALITY": 70,
     "INTERLACE": "Line"
   },
   {
-    "SIZE": "Medium",
-    "POSTFIX": "-m",
-    "MAX_WIDTH": 800,
-    "MAX_HEIGHT": 800,
-    "SIZING_QUALITY": 60,
-    "INTERLACE": "Line"
-  },
-  {
     "SIZE": "Small",
-    "POSTFIX": "-s",
-    "MAX_WIDTH": 300,
-    "MAX_HEIGHT": 400,
-    "SIZING_QUALITY": 50,
+    "POSTFIX": "-50",
+    "MAX_WIDTH": 50,
+    "MAX_HEIGHT": 50,
+    "SIZING_QUALITY": 60,
     "INTERLACE": "Line"
   }
 ];
-// The name of the destination S3 bucket is derived by adding this postfix to the name of the source S3 bucket:
-var DST_BUCKET_POSTFIX = "-resized";
-
-
 
 // get reference to S3 client
 var s3 = new AWS.S3();
@@ -54,14 +42,8 @@ exports.handler = function (event, context) {
   var srcName = srcFile[1];
   var scrExt = srcFile[2];
   // set the destination bucket
-  var dstBucket = srcBucket + DST_BUCKET_POSTFIX;
-
-
-  // make sure that source and destination are different buckets.
-  if (srcBucket === dstBucket) {
-    console.error("Destination bucket must be different from source bucket.");
-    return;
-  }
+  var dstBucket = srcBucket
+  var dstName = srcName.replace('uploads/originals', 'uploads/resized')
 
   if (!scrExt) {
     console.error('unable to derive file type extension from file key ' + srcKey);
@@ -97,10 +79,12 @@ exports.handler = function (event, context) {
   }
 
   function uploadImage(contentType, data, options, callback) {
+    console.log("Uploading '" + dstName + options.POSTFIX + '.' + scrExt + "' to " + dstBucket);
+
     // Upload the transformed image to the destination S3 bucket.
     s3.putObject({
         Bucket: dstBucket,
-        Key: srcName + options.POSTFIX + '.' + scrExt,
+        Key: dstName + options.POSTFIX + '.' + scrExt,
         Body: data,
         ContentType: contentType
       },
@@ -113,6 +97,8 @@ exports.handler = function (event, context) {
     [
       function download(next) {
           // Download the image from S3 into a buffer.
+          console.log("Downloading '" + srcKey + "' from " + srcBucket);
+
           s3.getObject({
               Bucket: srcBucket,
               Key: srcKey
@@ -121,6 +107,7 @@ exports.handler = function (event, context) {
       },
       function processImages(data, next) {
           async.each(imgVariants, function (variant, next) {
+            console.log("resizing " + variant.SIZE);
             processImage(data, variant, next);
           }, next);
       }
