@@ -10,7 +10,7 @@ var util = require('util');
 var imgVariants = [
   {
     "SIZE": "Medium",
-    "POSTFIX": "-300",
+    "POSTFIX": "300",
     "MAX_WIDTH": 300,
     "MAX_HEIGHT": 300,
     "SIZING_QUALITY": 70,
@@ -18,7 +18,7 @@ var imgVariants = [
   },
   {
     "SIZE": "Small",
-    "POSTFIX": "-50",
+    "POSTFIX": "50",
     "MAX_WIDTH": 50,
     "MAX_HEIGHT": 50,
     "SIZING_QUALITY": 60,
@@ -43,7 +43,8 @@ exports.handler = function (event, context) {
   var scrExt = srcFile[2];
   // set the destination bucket
   var dstBucket = srcBucket
-  var dstName = srcName.replace('uploads/originals', 'uploads/resized')
+  var dstBasePath = 'uploads/resized/'
+  var dstName = srcName.replace('uploads/originals', '')
 
   if (!scrExt) {
     console.error('unable to derive file type extension from file key ' + srcKey);
@@ -79,12 +80,14 @@ exports.handler = function (event, context) {
   }
 
   function uploadImage(contentType, data, options, callback) {
-    console.log("Uploading '" + dstName + options.POSTFIX + '.' + scrExt + "' to " + dstBucket);
+    var dstFullPath = dstBasePath + options.POSTFIX + dstName + '.' + scrExt
+
+    console.log("Uploading '" + dstFullPath + "' to " + dstBucket);
 
     // Upload the transformed image to the destination S3 bucket.
     s3.putObject({
         Bucket: dstBucket,
-        Key: dstName + options.POSTFIX + '.' + scrExt,
+        Key: dstFullPath,
         Body: data,
         ContentType: contentType
       },
