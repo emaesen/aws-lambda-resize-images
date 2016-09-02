@@ -9,16 +9,16 @@ var util = require('util');
 // configuration as code - add, modify, remove array elements as desired
 var imgVariants = [
   {
-    "SIZE": "Medium",
-    "POSTFIX": "300",
+    "SIZE": "Small",
+    "POSTFIX": "small",
     "MAX_WIDTH": 300,
     "MAX_HEIGHT": 300,
     "SIZING_QUALITY": 70,
     "INTERLACE": "Line"
   },
   {
-    "SIZE": "Small",
-    "POSTFIX": "50",
+    "SIZE": "Tiny",
+    "POSTFIX": "tiny",
     "MAX_WIDTH": 50,
     "MAX_HEIGHT": 50,
     "SIZING_QUALITY": 60,
