@@ -9,19 +9,19 @@ var util = require('util');
 // configuration as code - add, modify, remove array elements as desired
 var imgVariants = [
   {
-    "SIZE": "Small",
-    "POSTFIX": "small",
+    "SIZE": "Medium",
+    "PREFIX": "medium_",
     "MAX_WIDTH": 300,
     "MAX_HEIGHT": 300,
-    "SIZING_QUALITY": 70,
+    "SIZING_QUALITY": 95,
     "INTERLACE": "Line"
   },
   {
     "SIZE": "Tiny",
-    "POSTFIX": "tiny",
+    "PREFIX": "tiny_",
     "MAX_WIDTH": 50,
     "MAX_HEIGHT": 50,
-    "SIZING_QUALITY": 60,
+    "SIZING_QUALITY": 90,
     "INTERLACE": "Line"
   }
 ];
@@ -38,14 +38,16 @@ exports.handler = function (event, context) {
   // Object key may have spaces or unicode non-ASCII characters.
   var srcKey = decodeURIComponent(event.Records[0].s3.object.key.replace(/\+/g, " "));
   // derive the file name and extension
-  var srcFile = srcKey.match(/(.+)\.([^.]+)/);
+  /*var srcFile = srcKey.match(/(.+)\.([^.]+)/);
   var srcName = srcFile[1];
-  var scrExt = srcFile[2];
+  var scrExt = srcFile[2];*/
   // set the destination bucket
   var dstBucket = srcBucket
-  var dstBasePath = 'uploads/resized/'
-  var dstName = srcName.replace('uploads/originals', '')
-
+  var dstPathElements = srcKey.split('/')
+  var dstName = dstPathElements.pop()
+  dstPathElements[1] = 'resized'
+  var dstPath = dstPathElements.join('/') + '/'
+/*
   if (!scrExt) {
     console.error('unable to derive file type extension from file key ' + srcKey);
     return;
@@ -55,7 +57,7 @@ exports.handler = function (event, context) {
     console.log('skipping non-supported file type ' + srcKey + ' (must be jpg or png)');
     return;
   }
-
+*/
   function processImage(data, options, callback) {
     gm(data.Body).size(function (err, size) {
 
@@ -69,7 +71,7 @@ exports.handler = function (event, context) {
       this.resize(width, height)
         .quality(options.SIZING_QUALITY || 75)
         .interlace(options.INTERLACE || 'None')
-        .toBuffer(scrExt, function (err, buffer) {
+        .toBuffer('jpg', function (err, buffer) {
           if (err) {
             callback(err);
           } else {
@@ -80,14 +82,14 @@ exports.handler = function (event, context) {
   }
 
   function uploadImage(contentType, data, options, callback) {
-    var dstFullPath = dstBasePath + options.POSTFIX + dstName + '.' + scrExt
+    var dstKey = dstPath + options.PREFIX + dstName
 
-    console.log("Uploading '" + dstFullPath + "' to " + dstBucket);
+    console.log("Uploading '" + dstKey + "' to " + dstBucket);
 
     // Upload the transformed image to the destination S3 bucket.
     s3.putObject({
         Bucket: dstBucket,
-        Key: dstFullPath,
+        Key: dstKey,
         Body: data,
         ContentType: contentType
       },
