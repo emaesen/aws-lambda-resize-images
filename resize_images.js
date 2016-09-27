@@ -23,6 +23,13 @@ var imgVariants = [
     "MAX_HEIGHT": 50,
     "SIZING_QUALITY": 90,
     "INTERLACE": "Line"
+  },
+  {
+    "SIZE": "Large",
+    "PREFIX": "large_",
+    "MAX_WIDTH": 1080,
+    "SIZING_QUALITY": 90,
+    "INTERLACE": "Line"
   }
 ];
 
