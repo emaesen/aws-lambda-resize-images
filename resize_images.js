@@ -28,6 +28,15 @@ var imgVariants = [
     "SIZE": "Large",
     "PREFIX": "large_",
     "MAX_WIDTH": 1080,
+    "MAX_HEIGHT": 2060,
+    "SIZING_QUALITY": 90,
+    "INTERLACE": "Line"
+  },
+  {
+    "SIZE": "Newsfeed",
+    "PREFIX": "newsfeed_",
+    "MAX_WIDTH": 470,
+    "MAX_HEIGHT": 835,
     "SIZING_QUALITY": 90,
     "INTERLACE": "Line"
   }
