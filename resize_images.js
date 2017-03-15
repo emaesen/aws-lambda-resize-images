@@ -92,7 +92,7 @@ exports.handler = function (event, context) {
           if (err) {
             callback(err);
           } else {
-            uploadImage(data.ContentType, buffer, options, callback);
+            uploadImage('image/jpg', buffer, options, callback);
           }
         });
     });
