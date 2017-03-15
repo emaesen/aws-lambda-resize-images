@@ -79,7 +79,8 @@ exports.handler = function (event, context) {
 
       var scalingFactor = Math.min(
         options.MAX_WIDTH / size.width,
-        options.MAX_HEIGHT / size.height
+        options.MAX_HEIGHT / size.height,
+        1
       );
       var width = scalingFactor * size.width;
       var height = scalingFactor * size.height;
